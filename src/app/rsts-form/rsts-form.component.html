@@ -1,0 +1,47 @@
+<h2 class="form-heading"><b>Remote Smoke Testing Suite</b></h2>
+<form [formGroup]="rstsForm" (ngSubmit)="onSubmit()" class="online-form">
+    <div id="myModal" class="modal" *ngIf="successModal && showResult">
+        <div class="modal-content">
+            <p class="modal-form-heading"><b>Test completed successfully</b></p>
+            <p class="modal-form-sub-heading"><b>Please find the below results</b></p>
+            <div class="online-form">
+                <p><b>URL Submitted: </b><span>{{submittedUrl}}</span></p>
+                <!--<p><b>URL Submitted: </b><span>{{helloMessage}}</span></p>-->
+                <p><b>Browsers Selected: </b><span>{{submittedBrowsers.join(', ')}}</span></p>
+            </div>
+            <span class="close " (click)="closeModal() ">&times;</span>
+            <div id="modal-content "></div>
+        </div>
+    </div>
+    <!--<p><b>Hello Message: </b><span>{{helloMessage}}</span></p>
+    <p><b>URL Selected: </b><span>{{submittedUrl}}</span></p>-->
+    <div id="myModal" class="modal" *ngIf="failureModal && showResult">
+        <div class=" modal-content ">
+            <p class="modal-form-heading "><b>Test failed</b></p>
+            <p class="modal-form-sub-heading "><b>Please make sure the Web drivers are configured</b></p>
+            <span class="close " (click)="closeModal() ">&times;</span>
+            <div id="modal-content "></div>
+        </div>
+    </div>
+    <div *ngIf="formSubmitted && rstsForm.get('url')?.invalid && !rstsForm.get('url')?.touched" class="text-danger">
+        URL is mandatory.
+    </div>
+    <div *ngIf="rstsForm.get('url').hasError('pattern') && formSubmitted && rstsForm.get('url')?.touched" class="text-danger">
+        Please enter a valid URL.
+    </div>
+    <div *ngIf="formSubmitted && rstsForm.get('browsers')?.invalid" class="text-danger">
+        Please select at least one browser.
+    </div>
+    <b>Enter a URL for smoke testing:</b>
+    <input type="url" id="urlInput" class="form-control" formControlName="url" required pattern="https?://.+" /><br/>
+    <br /><b>Select one or more browsers:</b><br />
+    <div class="flex-container">
+        <input type="checkbox" (change)="updateBrowsers('chrome')" formControlName="browsers" [checked]="browsers.includes('chrome')" name="browsers" value="chrome" /> Chrome
+        <br />
+        <input type="checkbox" (change)="updateBrowsers('firefox')" formControlName="browsers" [checked]="browsers.includes('firefox')" name="browsers" value="firefox" /> Firefox
+        <br />
+        <input type="checkbox" (change)="updateBrowsers('MicrosoftEdge')" formControlName="browsers" [checked]="browsers.includes('MicrosoftEdge')" name="browsers" value="MicrosoftEdge" /> Edge
+        <br />
+    </div>
+    <button type="submit" class="submit-button" [disabled]="rstsForm.invalid">Submit</button>
+</form>

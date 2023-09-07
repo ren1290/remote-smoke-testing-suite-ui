@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "remote-smoke-testing-suite"
+  "defaultProject": "remote-smoke-testing-suite",
+  "cli": {
+    "analytics": "ca7d767a-0610-492b-bc90-d9d63ec735db"
+  }
 }
