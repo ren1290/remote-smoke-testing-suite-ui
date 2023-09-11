@@ -1,47 +1,60 @@
-<h2 class="form-heading"><b>Remote Smoke Testing Suite</b></h2>
-<form [formGroup]="rstsForm" (ngSubmit)="onSubmit()" class="online-form">
-    <div id="myModal" class="modal" *ngIf="successModal && showResult">
-        <div class="modal-content">
-            <p class="modal-form-heading"><b>Test completed successfully</b></p>
-            <p class="modal-form-sub-heading"><b>Please find the below results</b></p>
-            <div class="online-form">
-                <p><b>URL Submitted: </b><span>{{submittedUrl}}</span></p>
-                <!--<p><b>URL Submitted: </b><span>{{helloMessage}}</span></p>-->
-                <p><b>Browsers Selected: </b><span>{{submittedBrowsers.join(', ')}}</span></p>
+<div class="container">
+    <h1>Remote Smoke Testing Suite</h1>
+    <form [formGroup]="rstsForm" (ngSubmit)="onSubmit()" id="contact">
+        <div id="myModal" class="modal" *ngIf="successModal && showResult">
+            <div class="modal-content">
+                <p class="modal-form-heading"><b>Test completed successfully</b></p>
+                <p class="modal-form-sub-heading"><b>Please find the below results</b></p>
+                <div class="online-form">
+                    <p><b>URL Submitted: </b><span>{{submittedUrl}}</span></p>
+                    <!--<p><b>URL Submitted: </b><span>{{helloMessage}}</span></p>-->
+                    <p><b>Browsers Selected: </b><span>{{submittedBrowsers.join(', ')}}</span></p>
+                </div>
             </div>
-            <span class="close " (click)="closeModal() ">&times;</span>
+            <span class="close" (click)="closeModal()">&times;</span>
             <div id="modal-content "></div>
         </div>
-    </div>
-    <!--<p><b>Hello Message: </b><span>{{helloMessage}}</span></p>
-    <p><b>URL Selected: </b><span>{{submittedUrl}}</span></p>-->
-    <div id="myModal" class="modal" *ngIf="failureModal && showResult">
-        <div class=" modal-content ">
-            <p class="modal-form-heading "><b>Test failed</b></p>
-            <p class="modal-form-sub-heading "><b>Please make sure the Web drivers are configured</b></p>
-            <span class="close " (click)="closeModal() ">&times;</span>
+        <div id="myModal" class="modal" *ngIf="isFormProcessing">
+            <div class="modal-content">
+                <img class="loading-image" src="http://www.downgraf.com/wp-content/uploads/2014/09/01-progress.gif">
+            </div>
+            <span class="close" (click)="closeModal()">&times;</span>
             <div id="modal-content "></div>
         </div>
-    </div>
-    <div *ngIf="formSubmitted && rstsForm.get('url')?.invalid && !rstsForm.get('url')?.touched" class="text-danger">
-        URL is mandatory.
-    </div>
-    <div *ngIf="rstsForm.get('url').hasError('pattern') && formSubmitted && rstsForm.get('url')?.touched" class="text-danger">
-        Please enter a valid URL.
-    </div>
-    <div *ngIf="formSubmitted && rstsForm.get('browsers')?.invalid" class="text-danger">
-        Please select at least one browser.
-    </div>
-    <b>Enter a URL for smoke testing:</b>
-    <input type="url" id="urlInput" class="form-control" formControlName="url" required pattern="https?://.+" /><br/>
-    <br /><b>Select one or more browsers:</b><br />
-    <div class="flex-container">
-        <input type="checkbox" (change)="updateBrowsers('chrome')" formControlName="browsers" [checked]="browsers.includes('chrome')" name="browsers" value="chrome" /> Chrome
-        <br />
-        <input type="checkbox" (change)="updateBrowsers('firefox')" formControlName="browsers" [checked]="browsers.includes('firefox')" name="browsers" value="firefox" /> Firefox
-        <br />
-        <input type="checkbox" (change)="updateBrowsers('MicrosoftEdge')" formControlName="browsers" [checked]="browsers.includes('MicrosoftEdge')" name="browsers" value="MicrosoftEdge" /> Edge
-        <br />
-    </div>
-    <button type="submit" class="submit-button" [disabled]="rstsForm.invalid">Submit</button>
-</form>
+        <!--<p><b>Hello Message: </b><span>{{helloMessage}}</span></p>
+        <p><b>URL Selected: </b><span>{{submittedUrl}}</span></p>-->
+        <div id="myModal" class="modal" *ngIf="failureModal && showResult">
+            <div class="modal-content">
+                <p class="modal-form-heading "><b>Test failed</b></p>
+                <p class="modal-form-sub-heading "><b>Please make sure the Web drivers are configured</b></p>
+                <span class="close " (click)="closeModal() ">&times;</span>
+                <div id="modal-content "></div>
+            </div>
+        </div>
+        <div *ngIf="formSubmitted && rstsForm.get('url')?.invalid && !rstsForm.get( 'url')?.touched " class="text-danger ">
+            URL is mandatory.
+        </div>
+        <div *ngIf="rstsForm.get('url')?.hasError('pattern') && formSubmitted && rstsForm.get('url')?.touched " class="text-danger ">
+            Please enter a valid URL.
+        </div>
+        <div *ngIf="formSubmitted && rstsForm.get('browsers')?.invalid" class="text-danger ">
+            Please select at least one browser.
+        </div>
+        <input type="url" placeholder="Enter a URL for Smoke Testing" id="urlInput" formControlName="url" required pattern="https?://.+ " /><br/>
+        <div class="grid">
+            <fieldset>
+                <legend>Select your browsers</legend>
+                <div class="form__group">
+                    <input type="checkbox" id="chrome" (change)="updateBrowsers('chrome')" formControlName="browsers" [checked]="browsers.includes('chrome')" name="browsers" value="chrome" />
+                    <label for="chrome">Chrome</label>
+                    <input type="checkbox" id="firefox" (change)="updateBrowsers('firefox')" formControlName="browsers" [checked]="browsers.includes('firefox')" name="browsers" value="firefox" />
+                    <label for="firefox">Firefox</label>
+                    <input type="checkbox" id="edge" (change)="updateBrowsers('MicrosoftEdge')" formControlName="browsers" [checked]="browsers.includes('MicrosoftEdge')" name="browsers" value="MicrosoftEdge" />
+                    <label for="edge">Edge</label>
+                </div>
+            </fieldset>
+        </div>
+        <button type="submit" class="submit-button" [disabled]="rstsForm.invalid">Submit</button>
+        <button type="button" (click)="resetForm()" class="reset-button" [disabled]="rstsForm.invalid">Reset</button>
+    </form>
+</div>

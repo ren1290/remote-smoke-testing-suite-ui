@@ -18,6 +18,8 @@ export class RSTSFormComponent {
   submittedUrl: string = '';
   submittedBrowsers: string[] = [];
   helloMessage: string = "Hi there!";
+  browsers!: string;
+  isFormProcessing!: boolean;
 
   constructor(private formService: FormService,private fb: FormBuilder) {
     this.rstsForm = this.fb.group({
@@ -28,6 +30,7 @@ export class RSTSFormComponent {
 
   updateBrowsers(browser: string) {
     const browserArray = this.rstsForm.get('browsers') as FormArray;
+    console.log("Before clear", browserArray);
     const index = browserArray.value.indexOf(browser);
  
     if (index !== -1) {
@@ -37,8 +40,10 @@ export class RSTSFormComponent {
     }
   }
  
- 
-  onSubmit() {
+onSubmit() {
+  const browserArray = this.rstsForm.get('browsers') as FormArray;
+  console.log(browserArray, "Submit Browser Array");
+    this.isFormProcessing = true;
     this.formSubmitted = true;
     if (this.rstsForm.invalid) {
       return;
@@ -50,6 +55,7 @@ export class RSTSFormComponent {
     this.formService.submitFormData(this.formData).subscribe(
       (response) => {
         console.log(response);
+        this.isFormProcessing = false;
         this.showResult = true;
         this.successModal = true;
       },
@@ -63,4 +69,17 @@ export class RSTSFormComponent {
   closeModal() {
     this.showResult = false;
   }
-}
+
+    resetForm() {
+      const browserArray = this.rstsForm.get('browsers') as FormArray;
+      console.log("Before clear", browserArray.value);
+      browserArray.clear();
+      console.log("After clear", browserArray.value);
+      this.rstsForm.reset();
+      console.log("After reset", browserArray.value);
+  }
+
+  }
+
+ 
+
